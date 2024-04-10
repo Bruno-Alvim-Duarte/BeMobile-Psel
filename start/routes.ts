@@ -22,5 +22,6 @@ router
     router
       .post('/cliente/store', [ClientesController, 'store'])
       .middleware(middleware.clienteInput())
+    router.put('cliente/update/:id', [ClientesController, 'update'])
   })
   .middleware(middleware.auth())

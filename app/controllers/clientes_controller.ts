@@ -39,7 +39,7 @@ export default class ClientesController {
         .status(422)
         .json({ message: `Cliente já está cadastrado com o id: ${clienteExists.id}` })
     }
-    const cliente = await Cliente.create({ cpf: data.cpf, nome: data.nome })
+    const client = await Cliente.create({ cpf: data.cpf, nome: data.nome })
     await Endereco.create({
       rua: data.rua,
       numero: data.numero,
@@ -47,15 +47,53 @@ export default class ClientesController {
       cidade: data.cidade,
       estado: data.estado,
       cep: data.cep,
-      clienteId: cliente.id,
+      clienteId: client.id,
     })
     await Telefone.create({
       numero: data.telefone,
-      clienteId: cliente.id,
+      clienteId: client.id,
     })
 
     return Cliente.query()
-      .where('id', cliente.id)
+      .where('id', client.id)
+      .preload('telefones')
+      .preload('endereco')
+      .firstOrFail()
+  }
+
+  async update({ params, request, response }: HttpContext) {
+    const data = request.only([
+      'nome',
+      'telefone',
+      'rua',
+      'numero',
+      'bairro',
+      'cidade',
+      'estado',
+      'cep',
+    ])
+
+    const client = await Cliente.find(params.id)
+    if (!client) {
+      return response.status(404).json({ message: 'Cliente não encontrado' })
+    }
+    const endereco = await Endereco.findBy('cliente_id', params.id)
+    client.nome = data.nome || client.nome
+    // Quando se faz um update de um número de telefone se adiciona mais um. Não faz sentido substituir o número de telefone
+    // se um cliente pode ter mais de um número de telefone
+    data.telefone && (await Telefone.create({ clienteId: params.id, numero: data.telefone }))
+    endereco!.rua = data.rua || endereco!.rua
+    endereco!.numero = data.numero || endereco!.numero
+    endereco!.bairro = data.bairro || endereco!.bairro
+    endereco!.cidade = data.cidade || endereco!.cidade
+    endereco!.estado = data.estado || endereco!.estado
+    endereco!.cep = data.cep || endereco!.cep
+
+    await client.save()
+    await endereco!.save()
+
+    return Cliente.query()
+      .where('id', client.id)
       .preload('telefones')
       .preload('endereco')
       .firstOrFail()
