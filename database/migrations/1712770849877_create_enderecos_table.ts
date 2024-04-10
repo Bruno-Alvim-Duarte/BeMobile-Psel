@@ -12,7 +12,7 @@ export default class extends BaseSchema {
       table.string('cidade').notNullable()
       table.string('estado').notNullable()
       table.string('cep').notNullable()
-      table.integer('user_id').unsigned().references('id').inTable('users')
+      table.integer('cliente_id').unsigned().references('id').inTable('clientes')
     })
   }
 
