@@ -54,11 +54,15 @@ export default class ClientesController {
       clienteId: client.id,
     })
 
-    return Cliente.query()
-      .where('id', client.id)
-      .preload('telefones')
-      .preload('endereco')
-      .firstOrFail()
+    return response
+      .status(201)
+      .json(
+        await Cliente.query()
+          .where('id', client.id)
+          .preload('telefones')
+          .preload('endereco')
+          .firstOrFail()
+      )
   }
 
   async update({ params, request, response }: HttpContext) {
