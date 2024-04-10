@@ -23,5 +23,6 @@ router
       .post('/cliente/store', [ClientesController, 'store'])
       .middleware(middleware.clienteInput())
     router.put('cliente/update/:id', [ClientesController, 'update'])
+    router.delete('cliente/delete/:id', [ClientesController, 'delete'])
   })
   .middleware(middleware.auth())

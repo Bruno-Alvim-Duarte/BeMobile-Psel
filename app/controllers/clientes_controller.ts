@@ -102,4 +102,18 @@ export default class ClientesController {
       .preload('endereco')
       .firstOrFail()
   }
+
+  async delete({ params, response }: HttpContext) {
+    const client = await Cliente.find(params.id)
+    if (!client) {
+      return response.status(404).json({ message: 'Cliente não encontrado' })
+    }
+
+    const endereco = await Endereco.findBy('cliente_id', params.id)
+    await endereco!.delete()
+    const telefones = await Telefone.findManyBy('cliente_id', params.id)
+    telefones.forEach(async (telefone) => await telefone.delete())
+    await client.delete()
+    return response.status(204)
+  }
 }
