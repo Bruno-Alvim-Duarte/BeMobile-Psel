@@ -1,4 +1,7 @@
-import { BaseModel, column } from '@adonisjs/lucid/orm'
+import { BaseModel, column, hasMany, hasOne } from '@adonisjs/lucid/orm'
+import Token from './token.js'
+import type { HasMany, HasOne } from '@adonisjs/lucid/types/relations'
+import Endereco from './endereco.js'
 
 export default class Cliente extends BaseModel {
   @column({ isPrimary: true })
@@ -9,4 +12,10 @@ export default class Cliente extends BaseModel {
 
   @column()
   declare cpf: string
+
+  @hasMany(() => Token)
+  declare tokens: HasMany<typeof Token>
+
+  @hasOne(() => Endereco)
+  declare endereco: HasOne<typeof Endereco>
 }
