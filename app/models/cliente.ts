@@ -1,5 +1,4 @@
 import { BaseModel, column, hasMany, hasOne } from '@adonisjs/lucid/orm'
-import Token from './token.js'
 import type { HasMany, HasOne } from '@adonisjs/lucid/types/relations'
 import Endereco from './endereco.js'
 import Telefone from './telefone.js'

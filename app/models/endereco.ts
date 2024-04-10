@@ -1,6 +1,6 @@
 import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
-import User from './user.js'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
+import Cliente from './cliente.js'
 
 export default class Endereco extends BaseModel {
   @column({ isPrimary: true })
@@ -18,7 +18,7 @@ export default class Endereco extends BaseModel {
   @column()
   declare cep: number
   @column()
-  declare userId: number
-  @belongsTo(() => User)
-  declare user: BelongsTo<typeof User>
+  declare clienteId: number
+  @belongsTo(() => Cliente)
+  declare cliente: BelongsTo<typeof Cliente>
 }
