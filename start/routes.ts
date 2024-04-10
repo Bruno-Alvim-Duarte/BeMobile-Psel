@@ -19,6 +19,8 @@ router
   .group(() => {
     router.get('/cliente', [ClientesController, 'index'])
     router.get('/cliente/show/:id', [ClientesController, 'show'])
-    router.post('/cliente/store', [ClientesController, 'store'])
+    router
+      .post('/cliente/store', [ClientesController, 'store'])
+      .middleware(middleware.clienteInput())
   })
   .middleware(middleware.auth())

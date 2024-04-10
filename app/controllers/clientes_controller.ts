@@ -21,7 +21,7 @@ export default class ClientesController {
     return response.status(200).json(client)
   }
 
-  async store({ request }: HttpContext) {
+  async store({ request, response }: HttpContext) {
     const data = request.only([
       'nome',
       'cpf',
@@ -33,7 +33,12 @@ export default class ClientesController {
       'estado',
       'cep',
     ])
-
+    const clienteExists = await Cliente.findBy('cpf', data.cpf)
+    if (clienteExists) {
+      return response
+        .status(422)
+        .json({ message: `Cliente já está cadastrado com o id: ${clienteExists.id}` })
+    }
     const cliente = await Cliente.create({ cpf: data.cpf, nome: data.nome })
     await Endereco.create({
       rua: data.rua,
