@@ -8,7 +8,7 @@ export default class Telefone extends BaseModel {
   @column()
   declare numero: string
   @column()
-  declare userId: number
+  declare clienteId: number
   @belongsTo(() => Cliente)
-  declare user: BelongsTo<typeof Cliente>
+  declare cliente: BelongsTo<typeof Cliente>
 }
