@@ -18,5 +18,7 @@ router.post('/login', [LoginController, 'index']).middleware(middleware.userInpu
 router
   .group(() => {
     router.get('/cliente', [ClientesController, 'index'])
+    router.get('/cliente/show/:id', [ClientesController, 'show'])
+    router.post('/cliente/store', [ClientesController, 'store'])
   })
   .middleware(middleware.auth())
