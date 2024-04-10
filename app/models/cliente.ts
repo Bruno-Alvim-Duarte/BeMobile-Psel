@@ -14,9 +14,6 @@ export default class Cliente extends BaseModel {
   @column()
   declare cpf: string
 
-  @hasMany(() => Token)
-  declare tokens: HasMany<typeof Token>
-
   @hasOne(() => Endereco)
   declare endereco: HasOne<typeof Endereco>
 
