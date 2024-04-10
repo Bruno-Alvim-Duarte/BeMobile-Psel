@@ -2,6 +2,7 @@ import { BaseModel, column, hasMany, hasOne } from '@adonisjs/lucid/orm'
 import Token from './token.js'
 import type { HasMany, HasOne } from '@adonisjs/lucid/types/relations'
 import Endereco from './endereco.js'
+import Telefone from './telefone.js'
 
 export default class Cliente extends BaseModel {
   @column({ isPrimary: true })
@@ -18,4 +19,7 @@ export default class Cliente extends BaseModel {
 
   @hasOne(() => Endereco)
   declare endereco: HasOne<typeof Endereco>
+
+  @hasMany(() => Telefone)
+  declare telefones: HasMany<typeof Telefone>
 }
