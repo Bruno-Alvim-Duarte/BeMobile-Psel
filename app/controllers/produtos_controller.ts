@@ -9,4 +9,9 @@ export default class ProdutosController {
       .orderBy('nome')
     return response.status(200).json(products)
   }
+
+  async show({ params, response }: HttpContext) {
+    const product = await Produto.query().where('id', params.id).preload('categorias')
+    return response.status(200).json(product)
+  }
 }

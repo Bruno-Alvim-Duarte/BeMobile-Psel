@@ -31,5 +31,6 @@ router
       .post('categorias/store', [CategoriasController, 'store'])
       .middleware(middleware.categoriaInput())
     router.get('produtos', [ProdutosController, 'index'])
+    router.get('produtos/show/:id', [ProdutosController, 'show'])
   })
   .middleware(middleware.auth())
