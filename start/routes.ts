@@ -10,6 +10,7 @@
 import router from '@adonisjs/core/services/router'
 const UsersController = () => import('../app/controllers/users_controller.js')
 import { middleware } from './kernel.js'
+const ProdutosController = () => import('#controllers/produtos_controller')
 const CategoriasController = () => import('#controllers/categorias_controller')
 const ClientesController = () => import('#controllers/clientes_controller')
 const LoginController = () => import('#controllers/login_controller')
@@ -18,16 +19,17 @@ router.post('/signup', [UsersController, 'createUser']).middleware(middleware.us
 router.post('/login', [LoginController, 'index']).middleware(middleware.userInput())
 router
   .group(() => {
-    router.get('/cliente', [ClientesController, 'index'])
-    router.get('/cliente/show/:id', [ClientesController, 'show'])
+    router.get('clientes', [ClientesController, 'index'])
+    router.get('clientes/show/:id', [ClientesController, 'show'])
     router
-      .post('/cliente/store', [ClientesController, 'store'])
+      .post('clientes/store', [ClientesController, 'store'])
       .middleware(middleware.clienteInput())
-    router.put('cliente/update/:id', [ClientesController, 'update'])
-    router.delete('cliente/delete/:id', [ClientesController, 'delete'])
-    router.get('/categoria', [CategoriasController, 'index'])
+    router.put('clientes/update/:id', [ClientesController, 'update'])
+    router.delete('clientes/delete/:id', [ClientesController, 'delete'])
+    router.get('categorias', [CategoriasController, 'index'])
     router
-      .post('/categoria/store', [CategoriasController, 'store'])
+      .post('categorias/store', [CategoriasController, 'store'])
       .middleware(middleware.categoriaInput())
+    router.get('produtos', [ProdutosController, 'index'])
   })
   .middleware(middleware.auth())
