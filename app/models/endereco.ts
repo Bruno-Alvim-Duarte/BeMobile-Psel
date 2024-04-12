@@ -16,7 +16,7 @@ export default class Endereco extends BaseModel {
   @column()
   declare estado: string
   @column()
-  declare cep: number
+  declare cep: string
   @column()
   declare clienteId: number
   @belongsTo(() => Cliente)

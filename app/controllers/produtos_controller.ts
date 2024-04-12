@@ -1,6 +1,6 @@
 import Categoria from '#models/categoria'
 import Produto from '#models/produto'
-import { updateProdutoValidator } from '#validators/produto'
+import { createProdutoValidator, updateProdutoValidator } from '#validators/produto'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class ProdutosController {
@@ -18,24 +18,18 @@ export default class ProdutosController {
   }
 
   async store({ request, response }: HttpContext) {
-    const data = request.only([
-      'preco',
-      'quantidade_em_estoque',
-      'nome',
-      'descricao',
-      'imagem_url',
-      'categorias_ids',
-    ])
+    const payload = await request.validateUsing(createProdutoValidator)
+
     const product = await Produto.create({
-      nome: data.nome,
-      descricao: data.descricao,
-      preco: data.preco,
-      imagemUrl: data.imagem_url,
-      quantidadeEmEstoque: data.quantidade_em_estoque,
+      nome: payload.nome,
+      descricao: payload.descricao,
+      preco: payload.preco,
+      imagemUrl: payload.imagem_url,
+      quantidadeEmEstoque: payload.quantidade_em_estoque,
     })
 
     // Transformar o array pra Set pra garantir que não vamos registrar ids duplicados
-    const categoriasIdsWithoutRepeat = [...new Set<number>(data.categorias_ids)]
+    const categoriasIdsWithoutRepeat = [...new Set<number>(payload.categorias_ids)]
     if (categoriasIdsWithoutRepeat && categoriasIdsWithoutRepeat.length > 0) {
       // Para cada item do set de categoria preciso checkar se ele existe de fato
       categoriasIdsWithoutRepeat.forEach(async (categoriaId) => {

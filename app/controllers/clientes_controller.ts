@@ -1,6 +1,7 @@
 import Cliente from '#models/cliente'
 import Endereco from '#models/endereco'
 import Telefone from '#models/telefone'
+import { createClienteValidator, updateClienteValidator } from '#validators/cliente'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class ClientesController {
@@ -22,35 +23,25 @@ export default class ClientesController {
   }
 
   async store({ request, response }: HttpContext) {
-    const data = request.only([
-      'nome',
-      'cpf',
-      'telefone',
-      'rua',
-      'numero',
-      'bairro',
-      'cidade',
-      'estado',
-      'cep',
-    ])
-    const clienteExists = await Cliente.findBy('cpf', data.cpf)
+    const payload = await request.validateUsing(createClienteValidator)
+    const clienteExists = await Cliente.findBy('cpf', payload.cpf)
     if (clienteExists) {
       return response
         .status(422)
         .json({ message: `Cliente já está cadastrado com o id: ${clienteExists.id}` })
     }
-    const client = await Cliente.create({ cpf: data.cpf, nome: data.nome })
+    const client = await Cliente.create({ cpf: payload.cpf, nome: payload.nome })
     await Endereco.create({
-      rua: data.rua,
-      numero: data.numero,
-      bairro: data.bairro,
-      cidade: data.cidade,
-      estado: data.estado,
-      cep: data.cep,
+      rua: payload.rua,
+      numero: payload.numero,
+      bairro: payload.bairro,
+      cidade: payload.cidade,
+      estado: payload.estado,
+      cep: payload.cep,
       clienteId: client.id,
     })
     await Telefone.create({
-      numero: data.telefone,
+      numero: payload.telefone,
       clienteId: client.id,
     })
 
@@ -66,32 +57,23 @@ export default class ClientesController {
   }
 
   async update({ params, request, response }: HttpContext) {
-    const data = request.only([
-      'nome',
-      'telefone',
-      'rua',
-      'numero',
-      'bairro',
-      'cidade',
-      'estado',
-      'cep',
-    ])
+    const payload = await request.validateUsing(updateClienteValidator)
 
     const client = await Cliente.find(params.id)
     if (!client) {
       return response.status(404).json({ message: 'Cliente não encontrado' })
     }
     const endereco = await Endereco.findBy('cliente_id', params.id)
-    client.nome = data.nome || client.nome
+    client.nome = payload.nome || client.nome
     // Quando se faz um update de um número de telefone se adiciona mais um. Não faz sentido substituir o número de telefone
     // se um cliente pode ter mais de um número de telefone
-    data.telefone && (await Telefone.create({ clienteId: params.id, numero: data.telefone }))
-    endereco!.rua = data.rua || endereco!.rua
-    endereco!.numero = data.numero || endereco!.numero
-    endereco!.bairro = data.bairro || endereco!.bairro
-    endereco!.cidade = data.cidade || endereco!.cidade
-    endereco!.estado = data.estado || endereco!.estado
-    endereco!.cep = data.cep || endereco!.cep
+    payload.telefone && (await Telefone.create({ clienteId: params.id, numero: payload.telefone }))
+    endereco!.rua = payload.rua || endereco!.rua
+    endereco!.numero = payload.numero || endereco!.numero
+    endereco!.bairro = payload.bairro || endereco!.bairro
+    endereco!.cidade = payload.cidade || endereco!.cidade
+    endereco!.estado = payload.estado || endereco!.estado
+    endereco!.cep = payload.cep || endereco!.cep
 
     await client.save()
     await endereco!.save()
