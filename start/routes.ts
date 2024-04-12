@@ -35,5 +35,6 @@ router
     router
       .post('produtos/store', [ProdutosController, 'store'])
       .middleware(middleware.produtoInput())
+    router.put('produtos/update/:id', [ProdutosController, 'update'])
   })
   .middleware(middleware.auth())
