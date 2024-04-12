@@ -1,8 +1,16 @@
-import { BaseModel, beforeFetch, beforeFind, column, manyToMany } from '@adonisjs/lucid/orm'
-import type { ManyToMany } from '@adonisjs/lucid/types/relations'
+import {
+  BaseModel,
+  beforeFetch,
+  beforeFind,
+  column,
+  hasMany,
+  manyToMany,
+} from '@adonisjs/lucid/orm'
+import type { HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
 import Categoria from './categoria.js'
 import { DateTime } from 'luxon'
 import { softDeleteQuery } from '#services/soft_delete'
+import Venda from './venda.js'
 
 export default class Produto extends BaseModel {
   @column({ isPrimary: true })
@@ -25,4 +33,6 @@ export default class Produto extends BaseModel {
   static softDeletesFind = softDeleteQuery
   @beforeFetch()
   static softDeletesFetch = softDeleteQuery
+  @hasMany(() => Venda)
+  declare vendas: HasMany<typeof Venda>
 }

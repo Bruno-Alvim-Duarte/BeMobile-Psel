@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, hasOne } from '@adonisjs/lucid/orm'
+import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
 import Cliente from './cliente.js'
-import type { HasOne } from '@adonisjs/lucid/types/relations'
+import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import Produto from './produto.js'
 
 export default class Venda extends BaseModel {
@@ -11,14 +11,14 @@ export default class Venda extends BaseModel {
   @column()
   declare clienteId: number
 
-  @hasOne(() => Cliente)
-  declare cliente: HasOne<typeof Cliente>
+  @belongsTo(() => Cliente)
+  declare cliente: BelongsTo<typeof Cliente>
 
   @column()
   declare produtoId: number
 
-  @hasOne(() => Produto)
-  declare produto: HasOne<typeof Produto>
+  @belongsTo(() => Produto)
+  declare produto: BelongsTo<typeof Produto>
 
   @column()
   declare quantidade: number
