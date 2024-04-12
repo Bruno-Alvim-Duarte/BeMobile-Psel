@@ -1,7 +1,11 @@
 import Cliente from '#models/cliente'
 import Endereco from '#models/endereco'
 import Telefone from '#models/telefone'
-import { createClienteValidator, updateClienteValidator } from '#validators/cliente'
+import {
+  createClienteValidator,
+  showClienteWithDateFilterValidator,
+  updateClienteValidator,
+} from '#validators/cliente'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class ClientesController {
@@ -13,11 +17,21 @@ export default class ClientesController {
     return response.status(200).json(clients)
   }
 
-  async show({ params, response }: HttpContext) {
+  async show({ params, request, response }: HttpContext) {
+    const { ano, mes } = await request.validateUsing(showClienteWithDateFilterValidator)
+
+    const hasYearFilter = ano || ''
+    const hasMonthFilter = mes || ''
+
     const client = await Cliente.query()
       .where('id', params.id)
       .preload('telefones')
       .preload('endereco')
+      .preload('vendas', (vendasQuery) => {
+        vendasQuery
+          .where('created_at', 'like', `%${hasYearFilter}-${hasMonthFilter}%-%`)
+          .preload('produto')
+      })
       .firstOrFail()
     return response.status(200).json(client)
   }

@@ -27,3 +27,16 @@ export const updateClienteValidator = vine.compile(
     cep: vine.string().fixedLength(8).optional(),
   })
 )
+
+export const showClienteWithDateFilterValidator = vine.compile(
+  vine.object({
+    ano: vine
+      .string()
+      .regex(new RegExp(/^\d{4}$/))
+      .optional(),
+    mes: vine
+      .string()
+      .regex(new RegExp(/^\d{2}$/))
+      .optional(),
+  })
+)
