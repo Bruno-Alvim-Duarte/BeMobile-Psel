@@ -6,10 +6,10 @@ export default class extends BaseSchema {
   async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
-      table.float('preco').notNullable()
-      table.integer('quantidade_em_estoque').notNullable()
       table.string('nome').notNullable()
       table.string('descricao').nullable()
+      table.float('preco').notNullable()
+      table.integer('quantidade_em_estoque').notNullable()
       table.string('imagem_url').nullable()
     })
   }
