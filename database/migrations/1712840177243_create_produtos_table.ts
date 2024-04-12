@@ -11,6 +11,7 @@ export default class extends BaseSchema {
       table.float('preco').notNullable()
       table.integer('quantidade_em_estoque').notNullable()
       table.string('imagem_url').nullable()
+      table.dateTime('deleted_at').defaultTo(null)
     })
   }
 

@@ -30,5 +30,6 @@ router
     router.get('produtos/show/:id', [ProdutosController, 'show'])
     router.post('produtos/store', [ProdutosController, 'store'])
     router.put('produtos/update/:id', [ProdutosController, 'update'])
+    router.delete('produtos/delete/:id', [ProdutosController, 'delete'])
   })
   .middleware(middleware.auth())

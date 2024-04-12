@@ -1,5 +1,6 @@
 import Categoria from '#models/categoria'
 import Produto from '#models/produto'
+import { softDelete } from '#services/soft_delete'
 import { createProdutoValidator, updateProdutoValidator } from '#validators/produto'
 import type { HttpContext } from '@adonisjs/core/http'
 
@@ -84,5 +85,14 @@ export default class ProdutosController {
       .preload('categorias')
     console.log(productWithCategories)
     return response.status(200).json(productWithCategories)
+  }
+
+  async delete({ params, response }: HttpContext) {
+    const product = await Produto.find(params.id)
+    if (!product) {
+      return response.status(404).json({ message: 'Produto não encontrado' })
+    }
+    await softDelete(product, 'deletedAt')
+    return response.status(204)
   }
 }
