@@ -1,11 +1,41 @@
 version: '3'
 services:
+  backend:
+    container_name: beMobile-backend
+    build: 
+      context: .
+    ports:
+      - "${PORT}:${PORT}"
+    volumes:
+      - ./:/home/node/app
+    depends_on:
+      - db
+    environment:
+      - TZ=UTC
+      - PORT=3333
+      - HOST=0.0.0.0
+      - LOG_LEVEL=info
+      - APP_KEY=mSnd-nKo0ErtAATj6ZTKJ0zBps1u5qEx
+      - NODE_ENV=development
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=123456
+      - DB_DATABASE=beMobileDB
+    networks:
+      - my-network
+    
   db:
     image: mysql:8.0.32
     container_name: beMobileDB
-    ports:
+    ports:  
       - 3306:3306
     environment:
       - MYSQL_ROOT_PASSWORD=123456
       - MYSQL_DATABASE=beMobileDB
-    restart: 'always'
+    networks:
+      - my-network
+
+networks:
+  my-network:
+    driver: bridge
