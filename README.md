@@ -226,7 +226,7 @@ POST /categorias/store
 
 #### Rota para visualizar todas as categorias criadas
 ```http
-GET categorias
+GET /categorias
 ```
 ##### Exemplo de resposta:
     
@@ -269,7 +269,7 @@ POST /produtos/store
 	]
 #### Rota para visualizar todos os produtos cadastrados (sem detalhes)
 ```http
-GET produtos
+GET /produtos
 ```
 ##### Exemplo de resposta:
 	[
@@ -302,7 +302,7 @@ GET /produtos/show/id
 	]
 #### Rota para atualização de dados de um produto
 ```http
-PUT produtos/update/id
+PUT /produtos/update/id
 ```
 ##### Exemplo de Requisição:
 > OBS: todos os campos são opcionais, a aplicação so vai editar os campos que você adicionar
@@ -341,7 +341,7 @@ PUT produtos/update/id
 	
 #### Rota para deletar  um produto (Soft Delete)
 ```http
-DELETE produtos/delete/id
+DELETE /produtos/delete/id
 ```
 ##### Exemplo de Resposta:
 
@@ -349,6 +349,9 @@ DELETE produtos/delete/id
 ## Vendas
 
 #### Rota para criar uma venda
+``` http
+POST /vendas/store
+```
 ##### Exemplo de requisição:
 	{
 	  "cliente_id": 1,
