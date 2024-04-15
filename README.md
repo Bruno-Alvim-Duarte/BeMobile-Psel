@@ -306,7 +306,8 @@ PUT /produtos/update/id
 ```
 ##### Exemplo de Requisição:
 > OBS: todos os campos são opcionais, a aplicação so vai editar os campos que você adicionar
->OBS 2: o campo de categorias_ids, vai substituir as categorias do produto pelas categorias que você mandar na requisição
+> 
+> OBS 2: o campo de categorias_ids, vai substituir as categorias do produto pelas categorias que você mandar na requisição
 
 	{
 	  "nome": "Refrigerador Ultimate Atualizado",
