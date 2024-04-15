@@ -19,8 +19,9 @@ Trata-se de uma aplicação backend API RESTful sendo possível cadastrar e faze
 ## Documentação da API
 ## Login
 ####  Rota para cadastrar um usuário
-
-    POST /signup
+```http
+POST /signup
+```
 Exemplo de body:
 
     {
@@ -36,9 +37,9 @@ Exemplo de resposta:
 	}
 
 #### Rota para fazer login
-
-    POST /login
-   
+```http
+POST /login
+```
 Exemplo de body:
 
     {
@@ -61,8 +62,9 @@ Exemplo de resposta:
 ## Clientes
 
 #### Rota para registrar um cliente
-
-    POST /clientes/store
+```http
+POST /clientes/store
+```
 Exemplo de body:
 
     {
@@ -102,9 +104,9 @@ Exemplo de resposta:
 	}
 
 #### Rota para visualizar todos os clientes registrados
-
-    GET /clientes
-
+```http
+GET /clientes
+```
 ##### Exemplo de Response:
 
     [
@@ -118,9 +120,9 @@ Exemplo de resposta:
 #### Rota para visualizar detalhadamente e as vendas de um cliente
 
 > OBS: Nessa rota você pode passar um ano e um mês para filtrar as vendas que o cliente participou por essa data 
-
-    GET /clientes/show/id/?ano=2004&mes=08
-
+```http
+GET /clientes/show/id/?ano=2004&mes=08
+```
 ##### Exemplo de Response:
 
     {
@@ -147,9 +149,9 @@ Exemplo de resposta:
 	  "vendas": []
 	}
 #### Rota para editar os dados de um cliente
-
-    PUT /clientes/update/id
-    
+```http
+PUT /clientes/update/id
+```
 ##### Exemplo de request:
 ##### Body:
 	
@@ -197,8 +199,9 @@ Exemplo de resposta:
 	}
 	
 #### Rota para deletar um cliente
-
-    DELETE /clientes/delete/1
+```http
+DELETE /clientes/delete/1
+```
 ##### Exemplo de resposta:
 
     204: No content
@@ -206,8 +209,9 @@ Exemplo de resposta:
 ## Categorias
     
 #### Rota para criar uma categoria de produto
-
-    POST /categorias/store
+```http
+POST /categorias/store
+```
 ##### Exemplo de requisição:
 
     {
@@ -221,8 +225,9 @@ Exemplo de resposta:
 	}
 
 #### Rota para visualizar todas as categorias criadas
-
-    GET categorias
+```http
+GET categorias
+```
 ##### Exemplo de resposta:
     
 	[
@@ -233,8 +238,9 @@ Exemplo de resposta:
 	]
 ## Produtos
 #### Rota para criar um produto
-
-    POST /produtos/store
+```http
+POST /produtos/store
+```
 ##### Exemplo de requisição:
 	{
 	  "nome": "Refrigerador Ultimate",
@@ -262,8 +268,9 @@ Exemplo de resposta:
 	  }
 	]
 #### Rota para visualizar todos os produtos cadastrados (sem detalhes)
-
-    GET produtos
+```http
+GET produtos
+```
 ##### Exemplo de resposta:
 	[
 		{
@@ -273,7 +280,9 @@ Exemplo de resposta:
 	     },
 	]
 #### Rota para visualizar um produto detalhadamente
-	GET /produtos/show/id
+```http
+GET /produtos/show/id
+```
 ##### Exemplo de resposta:
 	[
 	  {
@@ -292,7 +301,9 @@ Exemplo de resposta:
 	  }
 	]
 #### Rota para atualização de dados de um produto
-	PUT produtos/update/id
+```http
+PUT produtos/update/id
+```
 ##### Exemplo de Requisição:
 > OBS: todos os campos são opcionais, a aplicação so vai editar os campos que você adicionar
 >OBS 2: o campo de categorias_ids, vai substituir as categorias do produto pelas categorias que você mandar na requisição
@@ -329,9 +340,9 @@ Exemplo de resposta:
 	]
 	
 #### Rota para deletar  um produto (Soft Delete)
-
-    DELETE produtos/delete/id
-
+```http
+DELETE produtos/delete/id
+```
 ##### Exemplo de Resposta:
 
     204: No Content
