@@ -5,6 +5,13 @@ import { createVendaValidator } from '#validators/venda'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class VendasController {
+  /**
+   * @store
+   * @summary Cria um registro de venda
+   * @description Cria um registro de venda
+   * @responseBody 201 - <Venda>
+   * @requestBody <Venda>.only(cliente_id, produto_id, quantidade)
+   */
   async store({ request, response }: HttpContext) {
     const payload = await request.validateUsing(createVendaValidator)
     const product = await Produto.find(payload.produto_id)

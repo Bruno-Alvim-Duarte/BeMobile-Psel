@@ -8,6 +8,13 @@ import { createUserValidator } from '#validators/user'
 export default class LoginController {
   constructor(private tokenGenerator = new TokenGenerator()) {}
 
+  /**
+   * @index
+   * @summary Faz o login na aplicação e retorna um token JWT pra utilizar como autorização
+   * @description Faz o login na aplicação e retorna um token JWT pra utilizar como autorização
+   * @responseBody 200 - {"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJydW5vQGdtYWlsLmNvbSIsImlhdCI6MTcxMzE5Mjg4NX0.K6tAscoqGxG02cCImA3Z2qBnDpGzO9tC9sUqLYgMBhM"}
+   * @requestBody <User>.only(email, senha)
+   */
   async index({ request, response }: HttpContext) {
     const payload = await request.validateUsing(createUserValidator)
     const user = await User.findBy('email', payload.email)

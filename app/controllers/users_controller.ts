@@ -3,6 +3,13 @@ import User from '../models/user.js'
 import { createUserValidator } from '#validators/user'
 
 export default class UsersController {
+  /**
+   * @store
+   * @summary Cria um usuário no banco de dados da aplicação
+   * @description Cria um usuário no banco de dados da aplicação
+   * @responseBody 200 - <User>
+   * @requestBody <User>.only(email, senha)
+   */
   async store({ request, response }: HttpContext) {
     const payload = await request.validateUsing(createUserValidator)
     const userExists = await User.findBy('email', payload.email)

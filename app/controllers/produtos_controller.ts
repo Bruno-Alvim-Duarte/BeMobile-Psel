@@ -5,6 +5,12 @@ import { createProdutoValidator, updateProdutoValidator } from '#validators/prod
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class ProdutosController {
+  /**
+   * @index
+   * @summary Retorna as principais informações de todos os produtos
+   * @description Retorna as principais informações de todos os produtos
+   * @responseBody 200 - <Produto[]>.only(id, preco, nome)
+   */
   async index({ response }: HttpContext) {
     const products = await Produto.query()
       .from('produtos')
@@ -12,12 +18,24 @@ export default class ProdutosController {
       .orderBy('nome')
     return response.status(200).json(products)
   }
-
+  /**
+   * @show
+   * @summary Retorna detalhadamente as informações de um produto específico
+   * @description Retorna detalhadamente as informações de um produto específico
+   * @responseBody 200 - <Produto[]>.with(categorias)
+   */
   async show({ params, response }: HttpContext) {
     const product = await Produto.query().where('id', params.id).preload('categorias')
     return response.status(200).json(product)
   }
 
+  /**
+   * @store
+   * @summary Cria um Produto e o retorna
+   * @description Cria um Produto e o retorna
+   * @responseBody 201 - <Produto>.with(categorias)
+   * @requestBody <Produto>.exclude(id).append("categorias_ids": [1,2,3])
+   */
   async store({ request, response }: HttpContext) {
     const payload = await request.validateUsing(createProdutoValidator)
 
@@ -50,7 +68,13 @@ export default class ProdutosController {
       .preload('categorias')
     return response.status(201).json(productWithCategories)
   }
-
+  /**
+   * @update
+   * @summary Atualiza um produto e o retorna atualizado
+   * @description Atualiza um produto e o retorna atualizado OBS: todos os dados são opcionais ele so vai atualizar os que você colocar
+   * @responseBody 200 - <Produto>.with(categorias)
+   * @requestBody <Produto>.exclude(id).append("categorias_ids": [1,2,3])
+   */
   async update({ params, request, response }: HttpContext) {
     const payload = await request.validateUsing(updateProdutoValidator)
 
@@ -86,6 +110,13 @@ export default class ProdutosController {
     console.log(productWithCategories)
     return response.status(200).json(productWithCategories)
   }
+
+  /**
+   * @deleteProduct
+   * @summary Faz o Soft Delete de um Produto
+   * @description Faz o Soft Delete de um Produto
+   * @responseBody 204
+   */
 
   async delete({ params, response }: HttpContext) {
     const product = await Produto.find(params.id)

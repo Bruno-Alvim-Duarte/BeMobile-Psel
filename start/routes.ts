@@ -15,6 +15,8 @@ const ProdutosController = () => import('#controllers/produtos_controller')
 const CategoriasController = () => import('#controllers/categorias_controller')
 const ClientesController = () => import('#controllers/clientes_controller')
 const LoginController = () => import('#controllers/login_controller')
+import AutoSwagger from 'adonis-autoswagger'
+import swagger from '#config/swagger'
 
 router.post('/signup', [UsersController, 'store'])
 router.post('/login', [LoginController, 'index'])
@@ -35,3 +37,15 @@ router
     router.post('vendas/store', [VendasController, 'store'])
   })
   .middleware(middleware.auth())
+
+// returns swagger in YAML
+router.get('/swagger', async () => {
+  return AutoSwagger.default.docs(router.toJSON(), swagger)
+})
+
+// Renders Swagger-UI and passes YAML-output of /swagger
+router.get('/docs', async () => {
+  return AutoSwagger.default.ui('/swagger', swagger)
+  // return AutoSwagger.default.scalar("/swagger", swagger); to use Scalar instead
+  // return AutoSwagger.default.rapidoc("/swagger", swagger); to use RapiDoc instead
+})

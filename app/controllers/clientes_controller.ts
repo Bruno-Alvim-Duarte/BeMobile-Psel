@@ -9,6 +9,12 @@ import {
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class ClientesController {
+  /**
+   * @index
+   * @summary Retorna todos os Clientes
+   * @description Retorna todos os Clientes
+   * @responseBody 200 - <Cliente[]>
+   */
   async index({ response }: HttpContext) {
     const clients = await Cliente.all()
     if (!clients.length) {
@@ -17,25 +23,46 @@ export default class ClientesController {
     return response.status(200).json(clients)
   }
 
+  /**
+   *
+   * @show
+   * @sumamry Retorna detalhadamente os dados de um cliente específico
+   * @description Retorna detalhadamente os dados de um cliente específico
+   * @responseBody 200 - <Cliente>.with(telefones,endereco,vendas)
+   * @paramPath id - Id do cliente que vai ser visualizado
+   * @paramUse(ano, mes)
+   */
   async show({ params, request, response }: HttpContext) {
     const { ano, mes } = await request.validateUsing(showClienteWithDateFilterValidator)
 
     const hasYearFilter = ano || ''
     const hasMonthFilter = mes || ''
-
-    const client = await Cliente.query()
-      .where('id', params.id)
-      .preload('telefones')
-      .preload('endereco')
-      .preload('vendas', (vendasQuery) => {
-        vendasQuery
-          .where('created_at', 'like', `%${hasYearFilter}-${hasMonthFilter}%-%`)
-          .preload('produto')
-      })
-      .firstOrFail()
-    return response.status(200).json(client)
+    try {
+      const client = await Cliente.query()
+        .where('id', params.id)
+        .preload('telefones')
+        .preload('endereco')
+        .preload('vendas', (vendasQuery) => {
+          vendasQuery
+            .where('created_at', 'like', `%${hasYearFilter}-${hasMonthFilter}%-%`)
+            .preload('produto')
+        })
+        .firstOrFail()
+      return response.status(200).json(client)
+    } catch (e) {
+      return response.status(404).json({ message: 'cliente não encontrado' })
+    }
   }
 
+  /**
+   *
+   * @store
+   * @summary Cria um Cliente e o retorna como resposta
+   * @description Cria um Cliente e o retorna como resposta
+   * @responseBody 201 - <Cliente>.with(telefones, endereco)
+   * @requestBody { "nome": "string", "cpf": "string", "telefone": "string", "rua": "string", "numero": 300, "bairro": "string", "cidade": "string", "estado": "string", "cep": "string" }
+   *
+   */
   async store({ request, response }: HttpContext) {
     const payload = await request.validateUsing(createClienteValidator)
     const clienteExists = await Cliente.findBy('cpf', payload.cpf)
@@ -69,7 +96,13 @@ export default class ClientesController {
           .firstOrFail()
       )
   }
-
+  /**
+   * @update
+   * @summary Atualiza os dados de um cliente e retorna ele atualizado
+   * @description Atualiza os dados de um cliente e retorna ele atualizado OBS: todos os dados são opcionais ele so vai atualizar os que você colocar
+   * @responseBody 200 - <Cliente>.with(telefones, endereco)
+   * @requestBody { "nome": "string", "cpf": "string", "telefone": "string", "rua": "string", "numero": 300, "bairro": "string", "cidade": "string", "estado": "string", "cep": "string" }
+   */
   async update({ params, request, response }: HttpContext) {
     const payload = await request.validateUsing(updateClienteValidator)
 
@@ -99,6 +132,12 @@ export default class ClientesController {
       .firstOrFail()
   }
 
+  /**
+   * @deleteClient
+   * @summary Apaga um cliente seu endereço e seus telefones
+   * @description Apaga um cliente seu endereço e seus telefones
+   * @responseBody 204
+   */
   async delete({ params, response }: HttpContext) {
     const client = await Cliente.find(params.id)
     if (!client) {
