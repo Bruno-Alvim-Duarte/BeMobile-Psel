@@ -42,6 +42,9 @@ export default {
       name: 'Authorization',
       description: 'Token JWT',
     },
+    BearerAuth: {},
+    BasicAuth: {},
+    ApiKeyAuth: {},
   },
   defaultSecurityScheme: 'JWTAuth',
 } as options
